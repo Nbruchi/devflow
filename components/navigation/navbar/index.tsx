@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggler from "./theme-toggler";
+import MobileNavigation from "./mobile-navigation";
 
 const Navbar = () => {
     return (
@@ -16,6 +17,7 @@ const Navbar = () => {
             <div className="flex-between gap-5">
                 <ThemeToggler />
             </div>
+            <MobileNavigation />
         </nav>
     );
 };
