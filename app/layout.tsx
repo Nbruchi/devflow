@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ThemeProvider from "@/context/theme";
+import { Toaster } from "@/components/ui/sonner";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
 
 const inter = localFont({
     src: "./fonts/InterVF.ttf",
@@ -23,14 +27,23 @@ export const metadata: Metadata = {
     },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const session = await auth();
+
     return (
-        <html lang="en">
-            <body className={`${inter.className} ${spaceGrotesk.variable} antialiased`}>{children}</body>
+        <html lang="en" suppressHydrationWarning>
+            <SessionProvider session={session}>
+                <body className={`${inter.className} ${spaceGrotesk.variable} antialiased`}>
+                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                        <Toaster />
+                        {children}
+                    </ThemeProvider>
+                </body>
+            </SessionProvider>
         </html>
     );
 }
