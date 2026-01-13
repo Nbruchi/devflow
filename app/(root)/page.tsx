@@ -1,5 +1,8 @@
+import QuestionCard from "@/components/cards/question-card";
+import HomeFilter from "@/components/filters/home-filter";
 import LocalSearch from "@/components/search/local-search";
 import { Button } from "@/components/ui/button";
+import { questions } from "@/constants";
 import ROUTES from "@/constants/routes";
 import Link from "next/link";
 
@@ -9,7 +12,6 @@ interface SearchParms {
 
 const Page = async ({ searchParams }: SearchParms) => {
     const { query = "" } = await searchParams;
-    console.log({ query });
 
     return (
         <>
@@ -27,13 +29,11 @@ const Page = async ({ searchParams }: SearchParms) => {
                     route="/"
                 />
             </section>
-            HomeFilter
+            <HomeFilter />
             <div className="mt-10 flex w-full flex-col gap-6">
-                <p>Question 1</p>
-                <p>Question 2</p>
-                <p>Question 3</p>
-                <p>Question 4</p>
-                <p>Question 5</p>
+                {questions.map((question) => (
+                    <QuestionCard key={question._id} question={question} />
+                ))}
             </div>
         </>
     );

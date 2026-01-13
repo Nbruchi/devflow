@@ -20,7 +20,7 @@ export const formUrlQuery = ({ params, key, value }: URLQueryParams) => {
     });
 };
 
-export const removeKeysFromQuery = ({ params, keysToRemove }: RemoveURLQueryParams) => {
+export const removeKeysFromUrlQuery = ({ params, keysToRemove }: RemoveURLQueryParams) => {
     const queryString = qs.parse(params);
     keysToRemove.forEach((key) => delete queryString[key]);
     return qs.stringifyUrl({
@@ -28,4 +28,3 @@ export const removeKeysFromQuery = ({ params, keysToRemove }: RemoveURLQueryPara
         query: queryString,
     });
 };
-

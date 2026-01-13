@@ -36,6 +36,99 @@ export const sidebarLinks = [
     },
 ];
 
+export const questions = [
+    {
+        _id: "1",
+        title: "How to learn React",
+        content: "I want to learn React. Can anyone suggest what to begin on?",
+        tags: [
+            { _id: "1", name: "React" },
+            { _id: "2", name: "JavaScript" },
+        ],
+        author: {
+            _id: "1",
+            name: "John Doe",
+            image: "https://c.pxhere.com/photos/e7/22/profile_face_person_man_human-1327211.jpg!d",
+        },
+        createdAt: new Date(),
+        upvotes: 0,
+        answers: 0,
+        views: 0,
+    },
+    {
+        _id: "2",
+        title: "How to learn TypeScript",
+        content: "I want to learn TypeScript. Can anyone suggest what to begin on?",
+        tags: [
+            { _id: "1", name: "TypeScript" },
+            { _id: "2", name: "JavaScript" },
+        ],
+        author: {
+            _id: "1",
+            name: "Gaylord Focker",
+            image: "https://www.goodfreephotos.com/cache/people/female-face-woman-portrait.jpg",
+        },
+        createdAt: new Date(),
+        upvotes: 0,
+        answers: 0,
+        views: 0,
+    },
+    {
+        _id: "3",
+        title: "How to learn Next.js",
+        content: "I want to learn Next.js. Can anyone suggest what to begin on?",
+        tags: [
+            { _id: "1", name: "Next.js" },
+            { _id: "2", name: "React" },
+        ],
+        author: {
+            _id: "1",
+            name: "Miles Morales",
+            image: "https://p2.piqsels.com/preview/876/356/902/boy-businessman-close-up-eyes.jpg",
+        },
+        createdAt: new Date(),
+        upvotes: 0,
+        answers: 0,
+        views: 0,
+    },
+    {
+        _id: "4",
+        title: "How to learn Tailwind CSS",
+        content: "I want to learn Tailwind CSS. Can anyone suggest what to begin on?",
+        tags: [
+            { _id: "1", name: "Tailwind CSS" },
+            { _id: "2", name: "CSS" },
+        ],
+        author: {
+            _id: "1",
+            name: "Carl Russel",
+            image: "https://p2.piqsels.com/preview/941/886/553/analog-watch-businessman-casual-close-up.jpg",
+        },
+        createdAt: new Date(),
+        upvotes: 0,
+        answers: 0,
+        views: 0,
+    },
+    {
+        _id: "5",
+        title: "How to learn GraphQL",
+        content: "I want to learn GraphQL. Can anyone suggest what to begin on?",
+        tags: [
+            { _id: "1", name: "GraphQL" },
+            { _id: "2", name: "API" },
+        ],
+        author: {
+            _id: "1",
+            name: "Steve Doe",
+            image: "https://p0.piqsels.com/preview/760/89/310/adult-businessman-contemporary-corporate.jpg",
+        },
+        createdAt: new Date(),
+        upvotes: 0,
+        answers: 0,
+        views: 0,
+    },
+];
+
 export const techMap: { [key: string]: string } = {
     // JavaScript variations
     javascript: "devicon-javascript-plain",
