@@ -4,7 +4,6 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { api } from "./lib/api";
 import bcrypt from "bcryptjs";
-import { ActionResponse } from "./types/global";
 import { IAccountDoc } from "./database/account.model";
 import { SignInSchema } from "./lib/validations";
 import { IUserDoc } from "./database/user.model";

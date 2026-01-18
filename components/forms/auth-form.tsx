@@ -11,7 +11,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
 import { useRouter } from "next/navigation";
-import { ActionResponse } from "@/types/global";
 import { toast } from "sonner";
 
 interface AuthFormProps<T extends FieldValues> {
