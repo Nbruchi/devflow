@@ -7,55 +7,57 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NavLinks = ({ isMobileNav = false }: { isMobileNav?: boolean }) => {
-    const pathname = usePathname();
-    const userId = 1;
+interface NavLinksProps {
+  isMobileNav?: boolean;
+  userId?: string;
+}
 
-    return (
-        <>
-            {sidebarLinks.map((item) => {
-                const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
+const NavLinks = ({ isMobileNav = false, userId }: NavLinksProps) => {
+  const pathname = usePathname();
 
-                if (item.route === "/profile") {
-                    if (userId) {
-                        item.route = `${item.route}/${userId}`;
-                    } else {
-                        return null;
-                    }
-                }
+  return (
+    <>
+      {sidebarLinks.map((item) => {
+        const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
 
-                const LinkComponent = (
-                    <Link
-                        href={item.route}
-                        key={item.label}
-                        className={cn(
-                            isActive ? "primary-gradient text-light-900 rounded-lg" : "text-dark300_light900",
-                            "flex-start gap-4 bg-transparent p-4"
-                        )}
-                    >
-                        <Image
-                            src={item.imgURL}
-                            alt={item.label}
-                            width={20}
-                            height={20}
-                            className={cn({ "invert-colors": !isActive })}
-                        />
-                        <p className={cn(isActive ? "base-bold" : "base-medium", !isMobileNav && "max-lg:hidden")}>
-                            {item.label}
-                        </p>
-                    </Link>
-                );
+        if (item.route === "/profile") {
+          if (userId) {
+            item.route = `${item.route}/${userId}`;
+          } else {
+            return null;
+          }
+        }
 
-                return isMobileNav ? (
-                    <SheetClose asChild key={item.route}>
-                        {LinkComponent}
-                    </SheetClose>
-                ) : (
-                    <div key={item.route}>{LinkComponent}</div>
-                );
-            })}
-        </>
-    );
+        const LinkComponent = (
+          <Link
+            href={item.route}
+            key={item.label}
+            className={cn(
+              isActive ? "primary-gradient text-light-900 rounded-lg" : "text-dark300_light900",
+              "flex-start gap-4 bg-transparent p-4"
+            )}
+          >
+            <Image
+              src={item.imgURL}
+              alt={item.label}
+              width={20}
+              height={20}
+              className={cn({ "invert-colors": !isActive })}
+            />
+            <p className={cn(isActive ? "base-bold" : "base-medium", !isMobileNav && "max-lg:hidden")}>{item.label}</p>
+          </Link>
+        );
+
+        return isMobileNav ? (
+          <SheetClose asChild key={item.route}>
+            {LinkComponent}
+          </SheetClose>
+        ) : (
+          <div key={item.route}>{LinkComponent}</div>
+        );
+      })}
+    </>
+  );
 };
 
 export default NavLinks;

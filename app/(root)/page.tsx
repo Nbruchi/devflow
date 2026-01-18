@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/question-card";
 import HomeFilter from "@/components/filters/home-filter";
 import LocalSearch from "@/components/search/local-search";
@@ -8,9 +7,6 @@ import ROUTES from "@/constants/routes";
 import Link from "next/link";
 
 const Page = async () => {
-  const session = await auth();
-  console.log(`Session: `, session);
-
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
