@@ -2,6 +2,7 @@ import mongoose, { Mongoose } from "mongoose";
 import logger from "./logger";
 
 const MONGODB_URI = process.env.MONGODB_URI;
+import "@/database";
 
 if (!MONGODB_URI) {
   throw new Error("Please provide MONGODB_URI in the environment variables");
