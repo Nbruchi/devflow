@@ -375,3 +375,85 @@ export const codeBlockLanguages = {
   markdown: "Markdown",
   "": "Plain Text",
 };
+
+export const techDescriptionMap: { [key: string]: string } = {
+  javascript: "JavaScript is a powerful language for building dynamic, interactive, and modern web applications.",
+  typescript:
+    "TypeScript adds strong typing to JavaScript, making it great for scalable and maintainable applications.",
+  react: "React is a popular library for building fast and modular user interfaces.",
+  nextjs: "Next.js is a React framework for server-side rendering and building optimized web applications.",
+  nodejs: "Node.js enables server-side JavaScript, allowing you to create fast, scalable network applications.",
+  python:
+    "Python is a versatile language known for readability and a vast ecosystem, often used for data science and automation.",
+  java: "Java is an object-oriented language commonly used for enterprise applications and Android development.",
+  cplusplus: "C++ is a high-performance language suitable for system software, game engines, and complex applications.",
+  git: "Git is a version control system that tracks changes in source code during software development.",
+  docker: "Docker is a container platform that simplifies application deployment and environment management.",
+  mongodb: "MongoDB is a NoSQL database for handling large volumes of flexible, document-based data.",
+  mysql: "MySQL is a popular relational database, known for reliability and ease of use.",
+  postgresql:
+    "PostgreSQL is a robust open-source relational database with advanced features and strong SQL compliance.",
+  aws: "AWS is a comprehensive cloud platform offering a wide range of services for deployment, storage, and more.",
+  vue: "Vue.js is a progressive framework for building user interfaces, designed for approachability and performance.",
+  angular: "Angular is a TypeScript-based framework for building scalable, enterprise-level web applications.",
+  svelte: "Svelte is a compiler-based framework that produces highly efficient, minimal JavaScript bundles.",
+  astro:
+    "Astro is a modern web framework focused on server-first rendering and shipping less JavaScript to the client.",
+
+  // Backend frameworks
+  express: "Express.js is a minimalist Node.js framework for building robust APIs and server-side applications.",
+  nestjs: "NestJS is a modular, TypeScript-first framework for building scalable server-side applications.",
+  django: "Django is a high-level Python framework with built-in authentication, ORM, and admin system.",
+  flask: "Flask is a lightweight Python micro-framework for building flexible APIs and web apps.",
+  springboot: "Spring Boot is a Java framework for building production-ready, enterprise-grade backend services.",
+  fastapi: "FastAPI is a modern Python framework optimized for speed, async support, and auto-generated documentation.",
+  rails:
+    "Ruby on Rails is an opinionated framework for building web applications quickly using convention over configuration.",
+
+  // Databases
+  redis: "Redis is an in-memory data store used for caching, queues, sessions, and fast key-value operations.",
+  sqlite: "SQLite is a file-based relational database ideal for embedded apps, testing, and small projects.",
+  dynamodb: "DynamoDB is AWS's fully managed NoSQL database built for speed and scalability.",
+  cassandra: "Cassandra is a distributed NoSQL database optimized for high availability and massive datasets.",
+
+  // Mobile development
+  reactnative: "React Native allows building native mobile apps using JavaScript and React components.",
+  flutter: "Flutter uses Dart to build cross-platform mobile apps with a single codebase and high-performance UI.",
+  kotlin: "Kotlin is a modern language for Android development, fully interoperable with Java.",
+  swift: "Swift is Apple's language for building iOS, macOS, and watchOS applications.",
+
+  // DevOps / Infrastructure
+  kubernetes: "Kubernetes automates deployment, scaling, and management of containerized applications.",
+  terraform:
+    "Terraform is an IaC tool that automates provisioning of cloud infrastructure using declarative configuration.",
+  nginx: "Nginx is a high-performance web server, reverse proxy, and load balancer.",
+  apache: "Apache HTTP Server is a widely used, flexible web server suitable for hosting web applications.",
+  githubactions: "GitHub Actions automates CI/CD workflows directly from GitHub repositories.",
+  gitlabci: "GitLab CI/CD provides automated pipelines for building, testing, and deploying applications.",
+
+  // Testing tools
+  jest: "Jest is a JavaScript testing framework for unit and integration testing.",
+  cypress: "Cypress is an end-to-end testing framework built for modern web applications.",
+  playwright: "Playwright enables reliable end-to-end testing for web apps across browsers.",
+  mocha: "Mocha is a flexible JavaScript test framework for async testing.",
+
+  // AI / ML
+  tensorflow: "TensorFlow is an open-source library for building machine learning and deep learning models.",
+  pytorch: "PyTorch is a flexible and widely used deep learning framework for research and production.",
+  scikitlearn: "Scikit-learn provides simple yet powerful tools for classical machine learning tasks in Python.",
+  langchain: "LangChain is a framework for building LLM-powered applications using composable modules.",
+
+  // Build tools
+  vite: "Vite is a lightning-fast frontend build tool and dev server.",
+  webpack: "Webpack bundles JavaScript modules, enabling complex asset pipelines.",
+  parcel: "Parcel is a zero-config bundler that automatically handles transforms and optimizations.",
+
+  // Cloud Platforms
+  gcp: "Google Cloud Platform provides cloud computing services including compute, storage, and AI tools.",
+  azure: "Microsoft Azure offers cloud services for hosting, deploying, and scaling applications.",
+
+  // Misc tools
+  graphql: "GraphQL is a query language for APIs that allows clients to request only the data they need.",
+  restapi: "REST is an architectural style for building scalable web APIs using stateless operations.",
+  websocket: "WebSockets enable real-time, two-way communication between clients and servers.",
+};

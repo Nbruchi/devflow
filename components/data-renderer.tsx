@@ -82,8 +82,8 @@ const DataRenderer = <T,>({ success, error, data, empty = DEFAULT_EMPTY, render 
     return (
       <StateSkeleton
         image={{
-          light: "/images/light-illustratio.png",
-          dark: "/images/dark-illustratio.png",
+          light: "/images/light-illustration.png",
+          dark: "/images/dark-illustration.png",
           alt: "Empty state illustration",
         }}
         title={empty.title}
