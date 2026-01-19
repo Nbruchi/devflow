@@ -168,7 +168,7 @@ export async function getQuestion(params: GetQuestionParams): Promise<ActionResp
   const { questionId } = validatedResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId).populate("tags").populate("author", "_id name image");
 
     if (!question) {
       throw new NotFoundError("Question");
