@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 import LocalSearch from "@/components/search/local-search";
 import DataRenderer from "@/components/data-renderer";
 import QuestionCard from "@/components/cards/question-card";
+import CommonFilter from "@/components/filters/common-filter";
+import { CollectionFilters } from "@/constants/filters";
+import Pagination from "@/components/pagination";
 
 const CollectionPage = async ({ searchParams }: RouteParams) => {
   const { page, pageSize, query, filter } = await searchParams;
@@ -23,7 +26,7 @@ const CollectionPage = async ({ searchParams }: RouteParams) => {
     redirect(ROUTES.SIGN_IN);
   }
 
-  const { collection } = data || {};
+  const { collection, isNext } = data || {};
 
   return (
     <>
@@ -37,6 +40,7 @@ const CollectionPage = async ({ searchParams }: RouteParams) => {
           placeholder="Search amazing minds here..."
           otherClasses="flex-1"
         />
+        <CommonFilter filters={CollectionFilters} otherClasses="min-h-[56px] sm:min-w-[170px]" />
       </div>
 
       <DataRenderer
@@ -52,6 +56,7 @@ const CollectionPage = async ({ searchParams }: RouteParams) => {
           </div>
         )}
       />
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

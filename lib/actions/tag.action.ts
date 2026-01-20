@@ -36,7 +36,7 @@ export const getTags = async (
     case "oldest":
       sortCriteria = { createdAt: 1 };
       break;
-    case "alphatetical":
+    case "name":
       sortCriteria = { name: 1 };
       break;
     default:

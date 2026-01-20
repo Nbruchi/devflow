@@ -1,8 +1,11 @@
 import QuestionCard from "@/components/cards/question-card";
 import DataRenderer from "@/components/data-renderer";
+import CommonFilter from "@/components/filters/common-filter";
 import HomeFilter from "@/components/filters/home-filter";
+import Pagination from "@/components/pagination";
 import LocalSearch from "@/components/search/local-search";
 import { Button } from "@/components/ui/button";
+import { HomePageFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
@@ -18,7 +21,7 @@ const Page = async ({ searchParams }: RouteParams) => {
     filter: filter || "",
   });
 
-  const { questions } = data || {};
+  const { questions,isNext } = data || {};
 
   return (
     <>
@@ -30,15 +33,27 @@ const Page = async ({ searchParams }: RouteParams) => {
       </section>
       <section className="mt-11">
         <LocalSearch imgSrc="/icons/search.svg" placeholder="Search Questions..." otherClasses="flex-1" route="/" />
+        <CommonFilter
+          filters={HomePageFilters}
+          otherClasses="min-h-[56px] sm:min-w-[170px]"
+          containerClasses="hidden max-md:flex"
+        />
       </section>
       <HomeFilter />
-      <DataRenderer success={success} error={error} data={questions} empty={EMPTY_QUESTION} render={(questions) => (
-        <div className="mt-10 flex w-full flex-col gap-6">
-          {questions.map((question) => (
-            <QuestionCard key={question._id} question={question}/>
-          ))}
-        </div>
-     )}/>
+      <DataRenderer
+        success={success}
+        error={error}
+        data={questions}
+        empty={EMPTY_QUESTION}
+        render={(questions) => (
+          <div className="mt-10 flex w-full flex-col gap-6">
+            {questions.map((question) => (
+              <QuestionCard key={question._id} question={question} />
+            ))}
+          </div>
+        )}
+      />
+      <Pagination page={ page} isNext={isNext || false}/>
     </>
   );
 };
