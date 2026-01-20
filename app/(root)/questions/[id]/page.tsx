@@ -4,6 +4,7 @@ import Preview from "@/components/editor/preview";
 import AnswerForm from "@/components/forms/answer-form";
 import Metric from "@/components/metric";
 import UserAvatar from "@/components/user-avatar";
+import Votes from "@/components/votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
@@ -53,7 +54,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Link>
           </div>
           <div className="flex justify-end">
-            <p>Votes</p>
+            <Votes upvotes={question.upvotes} hasUpvoted={true} hasDownvoted={false} downvotes={question.downvotes}/>
           </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">{title}</h2>
@@ -96,7 +97,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         />
       </section>
       <section className="my-5">
-        <AnswerForm questionId={question._id} />
+        <AnswerForm questionId={question._id} questionTitle={question.title} questionContent={question.content}/>
       </section>
     </>
   );
