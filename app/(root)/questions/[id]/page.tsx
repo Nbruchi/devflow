@@ -3,10 +3,12 @@ import TagCard from "@/components/cards/tag-card";
 import Preview from "@/components/editor/preview";
 import AnswerForm from "@/components/forms/answer-form";
 import Metric from "@/components/metric";
+import SaveQuestion from "@/components/questions/save-question";
 import UserAvatar from "@/components/user-avatar";
 import Votes from "@/components/votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
@@ -39,6 +41,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
   if (!success || !question) redirect("/404");
 
   const hasVotedPromise = hasVoted({ targetId: question._id, targetType: "question" });
+  const hasSavedQuestionPromise = hasSavedQuestion({ questionId: question._id });
 
   const { title, content, tags, author, createdAt, views, answers } = question;
 
@@ -58,7 +61,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
               <p className="paragraph-semibold text-dark300_light700">{author.name}</p>
             </Link>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
             <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
               <Votes
                 upvotes={question.upvotes}
@@ -67,6 +70,9 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                 targetId={question._id}
                 hasVotedPromise={hasVotedPromise}
               />
+            </Suspense>
+            <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
+              <SaveQuestion questionId={question._id} hasSavedQuestionPromise={hasSavedQuestionPromise} />
             </Suspense>
           </div>
         </div>
