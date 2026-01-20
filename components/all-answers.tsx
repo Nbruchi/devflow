@@ -27,7 +27,7 @@ const AllAnswers = ({ data, success, error, totalAnswers, page, isNext }: Props)
         empty={EMPTY_ANSWERS}
         render={(answers) => answers.map((answer) => <AnswerCard key={answer._id} {...answer} />)}
       />
-      <Pagination page={page} isNext={isNext} />
+      <Pagination page={Number(page)} isNext={isNext || false} />
     </div>
   );
 };

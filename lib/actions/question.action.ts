@@ -18,6 +18,7 @@ import {
 import { NotFoundError } from "../http-errors";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
+import dbConnect from "../mongoose";
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse<Question>> {
   const validationResult = await action({
@@ -276,5 +277,19 @@ export const incrementViews = async (params: IncrementViewsParams): Promise<Acti
     };
   } catch (error) {
     return handleError(validationResult) as ErrorResponse;
+  }
+};
+
+export const getHotQuestions = async ():Promise<ActionResponse<Question[]>> => {
+  try {
+    await dbConnect()
+    
+    const questions = await Question.find({})
+      .sort({ views: -1,upvotes:-1 })
+      .limit(5);
+
+    return { success: true, data: JSON.parse(JSON.stringify(questions)) };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };
