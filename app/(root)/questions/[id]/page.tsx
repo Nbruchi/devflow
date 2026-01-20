@@ -8,10 +8,13 @@ import Votes from "@/components/votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
+import { Suspense } from "react";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
@@ -35,6 +38,8 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!success || !question) redirect("/404");
 
+  const hasVotedPromise = hasVoted({ targetId: question._id, targetType: "question" });
+
   const { title, content, tags, author, createdAt, views, answers } = question;
 
   return (
@@ -54,7 +59,15 @@ const QuestionDetails = async ({ params }: RouteParams) => {
             </Link>
           </div>
           <div className="flex justify-end">
-            <Votes upvotes={question.upvotes} hasUpvoted={true} hasDownvoted={false} downvotes={question.downvotes}/>
+            <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
+              <Votes
+                upvotes={question.upvotes}
+                downvotes={question.downvotes}
+                targetType="question"
+                targetId={question._id}
+                hasVotedPromise={hasVotedPromise}
+              />
+            </Suspense>
           </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">{title}</h2>
@@ -97,7 +110,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         />
       </section>
       <section className="my-5">
-        <AnswerForm questionId={question._id} questionTitle={question.title} questionContent={question.content}/>
+        <AnswerForm questionId={question._id} questionTitle={question.title} questionContent={question.content} />
       </section>
     </>
   );

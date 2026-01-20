@@ -6,7 +6,7 @@ import { generateText } from "ai";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
-  const { question, content,userAnswer } = await request.json();
+  const { question, content, userAnswer } = await request.json();
 
   try {
     const validatedData = AIAnswerSchema.safeParse({ question, content });
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     const { text } = await generateText({
-      model: openai("gpt-5-codex"),
+      model: openai("gpt-3.5-turbo"),
       prompt: `Generate a markdown-formatted response to the following question: "${question}".  
       
       Consider the provided context:  

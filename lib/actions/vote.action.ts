@@ -4,7 +4,9 @@ import action from "../handlers/action";
 import { handleError } from "../handlers/error";
 import mongoose, { ClientSession } from "mongoose";
 import { Answer, Question, Vote } from "@/database";
-import { CreateVoteSchema, UpdateVoteCountSchema } from "../validations";
+import { CreateVoteSchema, HasVotedSchema, UpdateVoteCountSchema } from "../validations";
+import { revalidatePath } from "next/cache";
+import ROUTES from "@/constants/routes";
 
 export const updateVoteCount = async (
   params: UpdateVoteCountParams,
@@ -16,9 +18,9 @@ export const updateVoteCount = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { targetId, type, voteType, change } = validationResult.params!;
+  const { targetId, targetType, voteType, change } = validationResult.params!;
 
-  const Model = type === "question" ? Question : Answer;
+  const Model = targetType === "question" ? Question : Answer;
   const voteField = voteType === "upvote" ? "upvotes" : "downvotes";
 
   try {
@@ -41,10 +43,10 @@ export const createVote = async (params: CreateVoteParams): Promise<ActionRespon
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const { targetId, type, voteType } = validationResult.params!;
+  const { targetId, targetType, voteType } = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
-  if (!userId) handleError(new Error("Unauthorized")) as ErrorResponse;
+  if (!userId) return handleError(new Error("Unauthorized")) as ErrorResponse;
 
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -53,29 +55,65 @@ export const createVote = async (params: CreateVoteParams): Promise<ActionRespon
     const existingVote = await Vote.findOne({
       author: userId,
       actionId: targetId,
-      actionType: type,
+      actionType: targetType,
     }).session(session);
 
     if (existingVote) {
       if (existingVote.voteType === voteType) {
         await Vote.deleteOne({ _id: existingVote._id }).session(session);
-        await updateVoteCount({ targetId, type, voteType, change: -1 }, session);
+        await updateVoteCount({ targetId, targetType, voteType, change: -1 }, session);
       } else {
         await Vote.findByIdAndUpdate(existingVote._id, { voteType }, { new: true, session });
-        await updateVoteCount({ targetId, type, voteType, change: 1 }, session);
+        await updateVoteCount({ targetId, targetType, voteType: existingVote.voteType, change: -1 }, session);
+        await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session);
       }
     } else {
-      await Vote.create([{ targetId, type, voteType, change: 1 }], { session });
-      await updateVoteCount({ targetId, type, voteType, change: 1 }, session);
+      await Vote.create([{ targetId, targetType, voteType, change: 1 }], { session });
+      await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session);
     }
 
-    await session.commitTransaction();
-
+    await session.commitTransaction();  
+    revalidatePath(ROUTES.QUESTION(targetId));
     return { success: true };
   } catch (error) {
     await session.abortTransaction();
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+};
+
+export const hasVoted = async (params: HasVotedParams): Promise<ActionResponse<HasVotedResponse>> => {
+  const validationResult = await action({ params, schema: HasVotedSchema });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { targetId, targetType } = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  if (!userId) handleError(new Error("Unauthorized")) as ErrorResponse;
+
+  try {
+    const vote = await Vote.findOne({
+      author: userId,
+      actionId: targetId,
+      actionType: targetType,
+    });
+
+    if (!vote) {
+      return {
+        success: false,
+        data: { hasUpvoted: false, hasDownvoted: false },
+      };
+    }
+
+    return {
+      success: true,
+      data: { hasUpvoted: vote.voteType === "upvote", hasDownvoted: vote.voteType === "downvote" },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };

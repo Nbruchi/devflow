@@ -3,8 +3,14 @@ import UserAvatar from "../user-avatar";
 import ROUTES from "@/constants/routes";
 import { getTimeStamp } from "@/lib/utils";
 import Preview from "../editor/preview";
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
+import Votes from "../votes";
+import { hasVoted } from "@/lib/actions/vote.action";
 
-const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
+const AnswerCard = ({ _id, author, content, createdAt, upvotes, downvotes }: Answer) => {
+  const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
+
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span" />
@@ -24,7 +30,17 @@ const AnswerCard = ({ _id, author, content, createdAt }: Answer) => {
             </p>
           </Link>
         </div>
-        <div className="flex justify-end">Votes</div>
+        <div className="flex justify-end">
+          <Suspense fallback={<Loader2 className="size-4 animate-spin" />}>
+            <Votes
+              upvotes={upvotes}
+              downvotes={downvotes}
+              targetType="answer"
+              targetId={_id}
+              hasVotedPromise={hasVotedPromise}
+            />
+          </Suspense>
+        </div>
       </div>
       <Preview content={content} />
     </article>

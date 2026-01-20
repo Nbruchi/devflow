@@ -161,7 +161,7 @@ export const AIAnswerSchema = z.object({
 
 export const CreateVoteSchema = z.object({
   targetId: z.string().min(1, "Target ID is required"),
-  type: z.enum(["question", "answer"], {
+  targetType: z.enum(["question", "answer"], {
     message: "Invalid target type. Must be 'question' or 'answer'.",
   }),
   voteType: z.enum(["upvote", "downvote"], {
@@ -179,7 +179,7 @@ export const UpdateVoteCountSchema = CreateVoteSchema.extend({
 
 export const HasVotedSchema = CreateVoteSchema.pick({
   targetId: true,
-  type: true,
+  targetType: true,
 });
 
 export const CollectionBaseSchema = z.object({
