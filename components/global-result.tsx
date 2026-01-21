@@ -1,17 +1,20 @@
 "use client";
 
-import { globalSearch } from "@/lib/actions/general.action";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import GlobalFilter from "./filters/global-filter";
-import { Loader2 } from "lucide-react";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { globalSearch } from "@/lib/actions/general.action";
+
+import GlobalFilter from "./filters/global-filter";
 
 const GlobalResult = () => {
   const searchParams = useSearchParams();
+
   const [result, setResult] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   const global = searchParams.get("global");
   const type = searchParams.get("type");
@@ -19,24 +22,28 @@ const GlobalResult = () => {
   useEffect(() => {
     const fetchResult = async () => {
       setResult([]);
-      setIsLoading(true);
+      setLoading(true);
 
       try {
-        const response = await globalSearch({
+        const res = await globalSearch({
           query: global as string,
           type,
         });
 
-        setResult(response.data);
+        console.log(res);
+
+        setResult(res.data);
       } catch (error) {
+        console.log(error);
         setResult([]);
-        throw error;
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    if (global) fetchResult();
+    if (global) {
+      fetchResult();
+    }
   }, [global, type]);
 
   const renderLink = (type: string, id: string) => {
@@ -64,7 +71,7 @@ const GlobalResult = () => {
 
         {isLoading ? (
           <div className="flex-center flex-col px-5">
-            <Loader2 className="text-primary-500 my-2 h-10 w-10 animate-spin" />
+            <ReloadIcon className="text-primary-500 my-2 h-10 w-10 animate-spin" />
             <p className="text-dark200_light800 body-regular">Browsing the whole database..</p>
           </div>
         ) : (
