@@ -64,10 +64,22 @@ interface HasVotedResponse {
   hasDownvoted: boolean;
 }
 
-interface CollectionBaseParams{
+interface CollectionBaseParams {
   questionId: string;
 }
 
-interface GetUserParams{
+interface GetUserParams {
+  userId: string;
+}
+
+interface GetUserQuestionsParams extends Omit<PaginatedSearchParams, "filter" | "filter" | "sort"> {
+  userId: string;
+}
+
+interface GetUserAnswersParams extends PaginatedSearchParams {
+  userId: string;
+}
+
+interface GetUserTagsParams {
   userId: string;
 }

@@ -1,19 +1,21 @@
 "use client";
 
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { formUrlQuery } from "@/lib/url";
 import { cn } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+
 import { Button } from "./ui/button";
 
 interface Props {
   page: number | undefined | string;
   isNext: boolean;
-  containerClass?: string;
+  containerClasses?: string;
 }
 
-const Pagination = ({ page, isNext, containerClass }: Props) => {
-  const router = useRouter();
+const Pagination = ({ page = 1, isNext, containerClasses }: Props) => {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const handleNavigation = (type: "prev" | "next") => {
     const nextPageNumber = type === "prev" ? Number(page) - 1 : Number(page) + 1;
@@ -28,12 +30,12 @@ const Pagination = ({ page, isNext, containerClass }: Props) => {
   };
 
   return (
-    <div className={cn("mt-5 flex w-full items-center justify-center gap-2", containerClass)}>
-      {/* Previous page button */}
+    <div className={cn("mt-5 flex w-full items-center justify-center gap-2", containerClasses)}>
+      {/* Previous Page Button */}
       {Number(page) > 1 && (
         <Button
-          className="light-border-2 btn flex min-h-[36px] items-center justify-center gap-2 border"
           onClick={() => handleNavigation("prev")}
+          className="light-border-2 btn flex min-h-[36px] items-center justify-center gap-2 border"
         >
           <p className="body-medium text-dark200_light800">Prev</p>
         </Button>
@@ -42,10 +44,12 @@ const Pagination = ({ page, isNext, containerClass }: Props) => {
       <div className="bg-primary-500 flex items-center justify-center rounded-md px-3.5 py-2">
         <p className="body-semibold text-light-900">{page}</p>
       </div>
+
+      {/* Next Page Button */}
       {isNext && (
         <Button
-          className="light-border-2 btn flex min-h-[36px] items-center justify-center gap-2 border"
           onClick={() => handleNavigation("next")}
+          className="light-border-2 btn flex min-h-[36px] items-center justify-center gap-2 border"
         >
           <p className="body-medium text-dark200_light800">Next</p>
         </Button>

@@ -58,6 +58,7 @@ interface Answer {
   content: string;
   author: Author;
   upvotes: number;
+  question?: string;
   downvotes: number;
   createdAt: Date;
 }
@@ -78,4 +79,10 @@ interface Collection {
   _id: string;
   question: Question;
   author: Author | string;
+}
+
+interface BadgeCounts {
+  BRONZE: number;
+  GOLD: number;
+  SILVER: number;
 }
