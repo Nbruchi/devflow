@@ -17,6 +17,8 @@ import { NotFoundError, UnanuthorizedError } from "../http-errors";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 import dbConnect from "../mongoose";
+import { after } from "next/server";
+import { createInteraction } from "./interaction.action";
 
 export async function createQuestion(params: CreateQuestionParams): Promise<ActionResponse<Question>> {
   const validationResult = await action({
@@ -62,6 +64,15 @@ export async function createQuestion(params: CreateQuestionParams): Promise<Acti
     await TagQuestion.insertMany(tagQuestionDocuments, { session });
 
     await Question.findByIdAndUpdate(question._id, { $push: { tags: { $each: tagIds } } }, { session });
+
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionId: question._id.toString(),
+        actionTarget: "question",
+        authorId: userId as string,
+      });
+    });
 
     await session.commitTransaction();
 
@@ -316,7 +327,7 @@ export const deleteQuestion = async (params: DeleteQuestionParams): Promise<Acti
     await TagQuestion.deleteMany({ question: questionId }).session(session);
 
     if (question.tags.length > 0) {
-      await Tag.updateMany({ id: { $id: question.tags } }, { $inc: { questions: -1 } }, { session });
+      await Tag.updateMany({ id: { $in: question.tags } }, { $inc: { questions: -1 } }, { session });
     }
 
     await Vote.deleteMany({

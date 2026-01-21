@@ -51,13 +51,13 @@ const StateSkeleton = ({ image, title, message, button }: StateSkeletonProps) =>
       </>
       <h2 className="h2-bold text-dark200_light900 mt-8">{title}</h2>
       <p className="body-regular text-dark600_light700 my-3.5 max-w-md text-center">{message}</p>
-      {button && (
+      {button ? (
         <Link href={button.href}>
           <Button className="paragraph-medium bg-primary-500 text-light-900 hover:bg-primary-500 mt-5 min-h-[45px] cursor-pointer rounded-lg px-4 py-3">
             {button.text}
           </Button>
         </Link>
-      )}
+      ) : null}
     </div>
   );
 };

@@ -9,6 +9,8 @@ import { Question, Answer, Vote } from "@/database";
 import { NotFoundError } from "../http-errors";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
+import { after } from "next/server";
+import { createInteraction } from "./interaction.action";
 
 export const createAnswer = async (params: CreateAnswerParams): Promise<ActionResponse<IAnswerDoc>> => {
   const validationResult = await action({ params, schema: AnswerServerSchema, authorize: true });
@@ -32,6 +34,16 @@ export const createAnswer = async (params: CreateAnswerParams): Promise<ActionRe
 
     question.answers += 1;
     await question.save({ session });
+
+    after(async () => {
+      await createInteraction({
+        action:"post",
+        actionId: newAnswer._id,
+        actionTarget: "answer",
+        authorId:userId as string
+      })
+    })
+
     await session.commitTransaction();
 
     revalidatePath(ROUTES.QUESTION(questionId));

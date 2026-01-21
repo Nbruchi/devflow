@@ -112,7 +112,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
           data={answersResult?.answers}
           success={answersSuccess}
           error={error}
-          page={Number(page)}
+          page={Number(page) || 1}
           isNext={answersResult?.isNext || false}
           totalAnswers={answersResult?.totalAnswers || 0}
         />
