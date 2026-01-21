@@ -81,8 +81,8 @@ interface Collection {
   author: Author | string;
 }
 
-interface BadgeCounts {
-  BRONZE: number;
+interface Badges {
   GOLD: number;
   SILVER: number;
+  BRONZE: number;
 }

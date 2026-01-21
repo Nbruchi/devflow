@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import UserAvatar from "@/components/user-avatar";
 import ProfileLink from "@/components/user/profile-link";
-import { getUser, getUserQuestions, getUsersAnswers, getUserTopTags } from "@/lib/actions/user.action";
+import { getUser, getUserQuestions, getUsersAnswers, getUserStats, getUserTopTags } from "@/lib/actions/user.action";
 import { notFound } from "next/navigation";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -35,7 +35,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </div>
     );
 
-  const { user, totalQuestions, totalAnswers } = data!;
+  const { user } = data!;
+
+  const { data: userStats } = await getUserStats({ userId: id });
 
   const {
     success: userQuestionsSuccess,
@@ -108,9 +110,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </section>
 
       <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{
+        totalQuestions={userStats?.totalQuestions ?? 0}
+        totalAnswers={userStats?.totalAnswers ?? 0}
+        badges={userStats?.badges ?? {
           GOLD: 0,
           SILVER: 0,
           BRONZE: 0,
