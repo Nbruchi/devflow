@@ -1,7 +1,7 @@
 import { handleError } from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
 import { AIAnswerSchema } from "@/lib/validations";
-import { openai } from "@ai-sdk/openai";
+import { deepseek } from "@ai-sdk/deepseek";
 import { generateText } from "ai";
 import { NextResponse } from "next/server";
 
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     const { text } = await generateText({
-      model: openai("gpt-3.5-turbo"),
+      model: deepseek("deepseek-chat"),
       prompt: `Generate a markdown-formatted response to the following question: "${question}".  
       
       Consider the provided context:  
