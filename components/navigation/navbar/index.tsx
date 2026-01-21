@@ -4,6 +4,7 @@ import ThemeToggler from "./theme-toggler";
 import MobileNavigation from "./mobile-navigation";
 import { auth } from "@/auth";
 import UserAvatar from "@/components/user-avatar";
+import GlobalSearch from "@/components/search/global-search";
 
 const Navbar = async () => {
   const session = await auth();
@@ -17,7 +18,9 @@ const Navbar = async () => {
           <span className="text-primary-500">Flow</span>
         </p>
       </Link>
-      <p>Global Search</p>
+
+      <GlobalSearch />
+
       <div className="flex-between gap-5">
         <ThemeToggler />
         {session?.user && (
