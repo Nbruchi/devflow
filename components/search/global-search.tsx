@@ -16,13 +16,12 @@ const GlobalSearch = () => {
 
   const [search, setSearch] = useState(query || "");
   const [isOpen, setIsOpen] = useState(query || false);
-  const searchContainerRef = useRef<HTMLDivElement | null>(null);
+  const searchContainerRef = useRef(null);
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as Node;
-
-      if (searchContainerRef.current && !searchContainerRef.current?.contains(target)) {
+      // @ts-expect-error Property 'contains' does not exist on type 'EventTarget | null'.
+      if (searchContainerRef.current && !searchContainerRef.current?.contains(event.target)) {
         setIsOpen(false);
         setSearch("");
       }

@@ -1,9 +1,10 @@
 "use client";
 
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
+
 import { GlobalSearchFilters } from "@/constants/filters";
 import { formUrlQuery } from "@/lib/url";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 const GlobalFilter = () => {
   const router = useRouter();
@@ -32,11 +33,11 @@ const GlobalFilter = () => {
       newUrl = formUrlQuery({
         params: searchParams.toString(),
         key: "type",
-        value: item.toString(),
+        value: item.toLowerCase(),
       });
-
-      router.push(newUrl, { scroll: false });
     }
+
+    router.push(newUrl, { scroll: false });
   };
 
   return (
