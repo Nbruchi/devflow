@@ -1,6 +1,7 @@
 interface Tag {
   _id: string;
   name: string;
+  questions?: number;
 }
 
 interface Author {
@@ -70,6 +71,7 @@ interface User {
   location?: string;
   portfolio?: string;
   reputation?: number;
+  createdAt: Date;
 }
 
 interface Collection {
