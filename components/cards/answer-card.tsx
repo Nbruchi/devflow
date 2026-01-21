@@ -4,13 +4,14 @@ import ROUTES from "@/constants/routes";
 import { cn, getTimeStamp } from "@/lib/utils";
 import Preview from "../editor/preview";
 import { Suspense } from "react";
-import { Loader2 } from "lucide-react";
 import Votes from "../votes";
 import { hasVoted } from "@/lib/actions/vote.action";
+import EditDeleteAction from "../user/edit-delete-action";
 
 interface Props extends Answer {
   containerClasses?: string;
   showReadMore?: boolean;
+  showActionBtns?: boolean;
 }
 
 const AnswerCard = ({
@@ -23,6 +24,7 @@ const AnswerCard = ({
   question,
   containerClasses,
   showReadMore = false,
+  showActionBtns = false,
 }: Props) => {
   const hasVotedPromise = hasVoted({
     targetId: _id,
@@ -30,8 +32,14 @@ const AnswerCard = ({
   });
 
   return (
-    <article className={cn("light-border border-b py-10", containerClasses)}>
+    <article className={cn("light-border relative border-b py-10", containerClasses)}>
       <span id={`answer-${_id}`} className="hash-span" />
+
+      {showActionBtns && (
+        <div className="background-light800 flex-center absolute -top-5 -right-2 size-9 rounded-full">
+          <EditDeleteAction type="Answer" itemId={_id} />
+        </div>
+      )}
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-1 sm:items-center">

@@ -1,21 +1,19 @@
 "use server";
 
 import mongoose, { QueryFilter } from "mongoose";
-
-import Question, { IQuestionDoc } from "@/database/question.model";
-import TagQuestion from "@/database/tag-question.model";
-import Tag, { ITagDoc } from "@/database/tag.model";
-
+import { ITagDoc } from "@/database/tag.model";
+import { Tag, Question, TagQuestion, Collection, Vote, Answer } from "@/database";
 import action from "../handlers/action";
 import { handleError } from "../handlers/error";
 import {
   AskQuestionSchema,
+  DeleteQuestionSchema,
   EditQuestionSchema,
   GetQuestionSchema,
   IncrementViewsSchema,
   PaginatedSearchParamsSchema,
 } from "../validations";
-import { NotFoundError } from "../http-errors";
+import { NotFoundError, UnanuthorizedError } from "../http-errors";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 import dbConnect from "../mongoose";
@@ -280,16 +278,73 @@ export const incrementViews = async (params: IncrementViewsParams): Promise<Acti
   }
 };
 
-export const getHotQuestions = async ():Promise<ActionResponse<Question[]>> => {
+export const getHotQuestions = async (): Promise<ActionResponse<Question[]>> => {
   try {
-    await dbConnect()
-    
-    const questions = await Question.find({})
-      .sort({ views: -1,upvotes:-1 })
-      .limit(5);
+    await dbConnect();
+
+    const questions = await Question.find({}).sort({ views: -1, upvotes: -1 }).limit(5);
 
     return { success: true, data: JSON.parse(JSON.stringify(questions)) };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+};
+
+export const deleteQuestion = async (params: DeleteQuestionParams): Promise<ActionResponse> => {
+  const validationResult = await action({ params, schema: DeleteQuestionSchema, authorize: true });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { questionId } = validationResult.params!;
+  const { user } = validationResult?.session!;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const question = await Question.findById(questionId).session(session);
+    if (!question) throw new NotFoundError("Question");
+
+    if (question.author.toString() !== user?.id) {
+      throw new UnanuthorizedError("You're not authorized to delete this question");
+    }
+
+    await Collection.deleteMany({ question: questionId }).session(session);
+    await TagQuestion.deleteMany({ question: questionId }).session(session);
+
+    if (question.tags.length > 0) {
+      await Tag.updateMany({ id: { $id: question.tags } }, { $inc: { questions: -1 } }, { session });
+    }
+
+    await Vote.deleteMany({
+      actionId: questionId,
+      actionType: "question",
+    }).session(session);
+
+    const answers = await Answer.find({ question: questionId }).session(session);
+
+    if (answers.length > 0) {
+      await Answer.deleteMany({ question: questionId }).session(session);
+
+      await Vote.deleteMany({
+        actionId: { $in: answers.map((answer) => answer._id) },
+        actionType: "answer",
+      }).session(session);
+    }
+
+    await Question.findByIdAndDelete(questionId).session(session);
+
+    await session.commitTransaction();
+
+    revalidatePath(`/profile/${user?.id}`);
+    return { success: true };
+  } catch (error) {
+    await session.abortTransaction();
+    return handleError(error) as ErrorResponse;
+  } finally {
+    session.endSession();
   }
 };
